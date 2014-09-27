@@ -32,41 +32,46 @@ class quadratic_fit
 {
 public:
     struct point {
-        point()
-        {}
-
-        point(T _x, T _y) : x(_x), y(_y)
-        {}
-
-        T x;
-        T y;
+        point(T _x = 0.0, T _y = 0.0) : x(_x), y(_y) {}
+        T x, y;
     };
 
+    /// Default constructor.
     quadratic_fit()
     {}
 
+    /// @brief Constructor with initial memory reservation.
+    /// @param n Number of points to initially reserve memory for.
     explicit quadratic_fit(std::size_t n)
     {
         samples_.reserve(n);
     }
 
+    /// @brief Returns a reference to the point at specified location.
+    /// If idx is not within the valid range, an exception of type
+    /// std::out_of_range is thrown.
     point& operator[](std::size_t idx) {
-        return samples_[idx];
+        return samples_.at(idx);
     }
 
+    /// @brief Returns a const reference to the point at specified location.
+    /// If idx is not within the valid range, an exception of type
+    /// std::out_of_range is thrown.
     point const& operator[](std::size_t idx) const {
-        return samples_[idx];
+        return samples_.at(idx);
     }
 
+    /// Add a new point to the algorithm.
     void add(T x, T y) {
         samples_.push_back(point(x, y));
     }
 
+    /// Clear all points of the algorithm.
     void clear() {
         samples_.clear();
     }
 
-    /// @brief Compute the three coefficients.
+    /// Compute the three coefficients.
     std::array<T, 3> compute() const
     {
         std::array<T, 3> retval;
